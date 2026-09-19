@@ -409,8 +409,20 @@ function offerRepick() {
     }
 
     progress(80, '正在下载存档…');
-    const response = await fetch(`/api/saves/${encodeURIComponent(id)}/original`);
-    if (!response.ok) throw new Error(`存档读取失败（HTTP ${response.status}）`);
+    // The archive only hands the original save back to a browser that carries the upload
+    // token (`api.ts#getOriginal` guards it like every other write). Without this header
+    // the slow path could never re-parse a save — which is exactly how a fresh upload on a
+    // browser with no cached game folder got stuck on "存档读取失败（HTTP 401）".
+    const response = await fetch(`/api/saves/${encodeURIComponent(id)}/original`, {
+      headers: uploadHeaders(),
+    });
+    if (!response.ok) {
+      throw new Error(
+        response.status === 401
+          ? '存档读取失败（HTTP 401）：这台浏览器没带上上传口令。请先回目录页填入上传口令，再打开查看页。'
+          : `存档读取失败（HTTP ${response.status}）`,
+      );
+    }
     const bytes = new Uint8Array(await response.arrayBuffer());
 
     progress(85, `正在解压存档（${(bytes.length / 1024 / 1024).toFixed(1)} MB）…`);
