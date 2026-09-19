@@ -1,0 +1,13 @@
+{
+  "name": "@eu4/parser",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Europa Universalis IV .eu4 save game parser (zero runtime dependencies)",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test test/"
+  }
+}
