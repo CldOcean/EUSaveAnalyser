@@ -9,6 +9,8 @@
 需求见 [`docs/requirements.md`](docs/requirements.md)，解析器细节见
 [`packages/eu4-parser/README.md`](packages/eu4-parser/README.md)。
 
+**线上站点**：<https://try-eu4-savemanager.pages.dev>（Cloudflare Pages：Root `apps/site`、Build 留空、Output `public`；完整步骤见 [`部署手册.md`](部署手册.md)）。
+
 ---
 
 ## 当前进度
