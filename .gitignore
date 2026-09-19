@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+*.tsbuildinfo
+
+# local data: uploaded saves, derived snapshots, databases
+.data/
+*.sqlite
+*.sqlite-journal
+*.db
+
+# catalogue dev server storage (mirrors the R2 layout)
+apps/site/.dev-storage/
+
+# 2026-09-19 建站前修正：真正的本地库在**仓库根**（不在 apps/site 下）——
+# `.dev-storage` 是 251 MB / 131 文件的存档与产物，绝不能进 GitHub；
+# `.dsh-meow` 是本机记忆库（含 memory.db），同样不上传。
+.dev-storage/
+.dsh-meow/
+
+# the full per-mod flag export is a local convenience only: the deployed site
+# needs base/ plus the artwork it actually references, and 14k files would blow
+# past Cloudflare Pages' 20,000 file limit. It lives inside the site folder but
+# must never be committed — nor uploaded, which is why deploys go through git.
+apps/site/public/assets/flags/mods/
+
+# scratch
+tmp/
+*.log
+.DS_Store
+Thumbs.db

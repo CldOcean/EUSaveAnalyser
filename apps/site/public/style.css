@@ -1,0 +1,151 @@
+/* Slate palette, same family as the viewer page. The other three themes are applied by
+   page-theme.js, which sets body[data-theme]; every surface below reads these variables
+   so the whole page follows the theme, navigation bar included. */
+:root{
+  --bg:#0f1115; --panel:#161a21; --panel2:#1b212b; --ink:#e6e6e6; --ink-soft:#8a93a3;
+  --accent:#4b8fd6; --accent-ink:#08121c; --border:#263042; --border-soft:#1e2530;
+  --ok:#3fa76a; --warn:#c9a227; --danger:#c0503f;
+  --nav-bg:#16233a; --nav-ink:#c7d7ef; --nav-border:#0d1728; --nav-btn:#1f3151; --nav-btn-hover:#27405f;
+  --nav-glass:rgba(22,35,58,.62);
+  color-scheme:dark;
+}
+body[data-theme=parchment]{
+  --bg:#ece1c9; --panel:#faf4e5; --panel2:#f2e8d2; --ink:#3a3126; --ink-soft:#7a6a53;
+  --accent:#8a5a2b; --accent-ink:#fff8ec; --border:#d3c1a0; --border-soft:#e0d2b6;
+  --nav-bg:#e3d5b6; --nav-ink:#4a3c28; --nav-border:#d3c1a0; --nav-btn:#f6efdd; --nav-btn-hover:#fbf6ea;
+  --nav-glass:rgba(255,252,244,.55);
+  color-scheme:light;
+}
+body[data-theme=royal]{
+  --bg:#14110c; --panel:#1e1913; --panel2:#241d15; --ink:#eadfc6; --ink-soft:#a2916f;
+  --accent:#c9a227; --accent-ink:#1a1408; --border:#3d3324; --border-soft:#31291d;
+  --nav-bg:#1a140c; --nav-ink:#eadfc6; --nav-border:#0b0803; --nav-btn:#2b2216; --nav-btn-hover:#3a2e1c;
+  --nav-glass:rgba(26,20,12,.55);
+  color-scheme:dark;
+}
+body[data-theme=light]{
+  --bg:#f2f4f8; --panel:#ffffff; --panel2:#f7f9fc; --ink:#1d2530; --ink-soft:#67758a;
+  --accent:#2563eb; --accent-ink:#ffffff; --border:#dde4ee; --border-soft:#eaeff6;
+  --nav-bg:#ffffff; --nav-ink:#1d2530; --nav-border:#dde4ee; --nav-btn:#eef2f8; --nav-btn-hover:#e2e9f4;
+  --nav-glass:rgba(255,255,255,.6);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:22px 22px 60px;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;font-size:14px;line-height:1.55}
+h1{margin:0 0 3px;font-size:22px}
+.sub{color:var(--ink-soft);font-size:12.5px;margin:0}
+.hero{margin:6px 0 18px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:18px}
+
+/* The navigation bar is frosted acrylic: a half-transparent theme tint over the
+   wallpaper, blurred so what shows through stays a texture rather than a picture.
+   `--nav-glass` is the per-theme tint (white-family on parchment and light), and the
+   opaque `--nav-bg` is both the base declaration and the fallback below. */
+#nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:12px;
+  margin:-22px -22px 18px;padding:10px 18px;background:var(--nav-bg);background:var(--nav-glass);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
+  border-bottom:1px solid var(--nav-border)}
+/* No frosted glass: a translucent bar over a wallpaper would be unreadable, so the
+   solid theme colour comes back instead. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  #nav{background:var(--nav-bg)}
+}
+#nav .navTitle{flex:1;font-size:13.5px;color:var(--nav-ink);letter-spacing:.6px}
+button{background:var(--panel2);color:var(--ink);border:1px solid var(--border);border-radius:6px;
+  padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}
+button:hover{background:var(--panel);border-color:var(--accent);color:var(--accent)}
+button:disabled{opacity:.5;cursor:default}
+#nav button{background:var(--nav-btn);border-color:var(--nav-border);color:var(--nav-ink);min-width:38px;font-size:14px}
+#nav button:hover{background:var(--nav-btn-hover);color:var(--nav-ink)}
+
+.menu{position:absolute;right:16px;top:52px;z-index:45;display:none;min-width:190px;
+  background:#18263d;border:1px solid #2c4670;border-radius:6px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.menu.open{display:block}
+.menu .mi{display:block;width:100%;text-align:left;background:transparent;border:0;color:#dbe7f5;
+  padding:7px 10px;border-radius:4px;font-size:12.5px}
+.menu .mi:hover{background:#22375a;color:#fff}
+
+.drop{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+  border:2px dashed var(--border);border-radius:8px;padding:22px;color:var(--ink-soft);
+  transition:border-color .15s,background .15s}
+.drop.hot{border-color:var(--accent);background:rgba(75,143,214,.08);color:var(--ink)}
+.drop strong{color:var(--ink);font-size:14px}
+.progress{margin-top:10px;font-size:12.5px;color:var(--ink-soft);min-height:18px}
+.progress .bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:5px}
+.progress .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .15s}
+
+.toolbar{display:flex;align-items:center;gap:10px;margin:0 2px 10px;font-size:12.5px;color:var(--ink-soft)}
+.toolbar .grow{flex:1}
+.toolbar select{background:var(--panel2);color:var(--ink);border:1px solid var(--border);
+  border-radius:6px;padding:5px 8px;font-size:12.5px;font-family:inherit}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:13px;
+  display:flex;flex-direction:column;gap:8px}
+.card h3{margin:0;font-size:15px;display:flex;align-items:center;gap:8px;min-width:0}
+/* The title is the rename control, so it is a button that looks like the heading. */
+.card h3 .title{flex:1;min-width:0;display:flex;align-items:center;gap:6px;background:none;border:0;
+  border-radius:4px;padding:1px 3px;font-family:inherit;font-size:15px;font-weight:600;color:var(--ink);
+  cursor:pointer;text-align:left}
+.card h3 .title:hover{background:var(--panel2);border-color:transparent;color:var(--accent)}
+.card h3 .title .titleText{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card h3 .title .pen{flex:none;font-size:11px;opacity:0;transition:opacity .15s}
+.card h3 .title:hover .pen,.card h3 .title:focus-visible .pen{opacity:.85}
+.card .badge{font-size:11px;padding:1px 7px;border-radius:9px;border:1px solid var(--border);
+  color:var(--ink-soft);white-space:nowrap}
+.card .badge.raw{border-color:var(--warn);color:var(--warn)}
+.card .badge.parsed{border-color:var(--ok);color:var(--ok)}
+/* Fixed ratio: a card with a thumbnail and one without must still line up in the grid. */
+.card .thumb{position:relative;aspect-ratio:704/256;border-radius:8px;overflow:hidden;
+  background:var(--panel2);border:1px solid var(--border-soft)}
+.card .thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.card .thumb.missing::after{content:'地图缩略图待生成';position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;color:var(--ink-soft);font-size:12px}
+/* Protagonist flags: three fixed columns, so the first caption never moves when a
+   second or third country is added. Left-aligned and top-aligned by the grid.
+   With more than three countries the arrows flank the grid and page through it. */
+.card .heroes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.card .heroPager{display:flex;align-items:center;gap:6px}
+.card .heroPager .heroes{flex:1;min-width:0}
+.card .heroPager .page{flex:none;padding:4px 7px;border-radius:6px;font-size:12px;line-height:1;
+  background:var(--panel2);border:1px solid var(--border);color:var(--ink-soft)}
+.card .heroPager .page:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.card .hero{margin:0;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+/* A colonial nation has no artwork of its own: the card draws its mother country's flag
+   with the colony's own map colour over the right half. The three rules below are the
+   frozen wrapper, shared word for word with viewer.html — both pages draw one structure.
+   The card's own size and frame are what follows them. */
+.flagBox{position:relative;display:inline-block;line-height:0}
+.flagBox>img{display:block}
+.flagTint{position:absolute;left:50%;top:0;width:50%;height:100%;pointer-events:none}
+.card .hero .flagBox,.card .hero .heroFallback{width:48px;height:48px;border-radius:4px;
+  border:1px solid var(--border-soft);background:var(--panel2);overflow:hidden}
+.card .hero .flagBox>img{width:100%;height:100%;object-fit:contain}
+.card .hero .heroFallback{display:flex;align-items:center;justify-content:center;font-size:11px;
+  color:var(--ink-soft);letter-spacing:.5px;font-variant-numeric:tabular-nums}
+/* Two lines on purpose: the player name, then the country. The old single
+   "player-country" caption was cut off in the card, and the country name is the part
+   that has to survive — so each line ellipsises on its own instead of the country
+   being pushed out of view. With no player name only one line is rendered. */
+.card .hero figcaption{width:100%;font-size:11px;color:var(--ink-soft);text-align:center;
+  display:flex;flex-direction:column;gap:1px;overflow:hidden}
+.card .hero figcaption .capLine{display:block;width:100%;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12.5px}
+.card dt{color:var(--ink-soft)}
+.card dd{margin:0;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .secondary{margin:0;font-size:11px;line-height:1.5;color:var(--ink-soft);word-break:break-word}
+.card .actions{display:flex;gap:8px;margin-top:auto;padding-top:4px}
+.card .actions .grow{flex:1}
+/* The single-file page is the quiet second way in: it must not read as a button of
+   equal weight to 查看, but it still has to look like a control in all four themes. */
+.card .actions .offline{display:inline-flex;align-items:center;padding:6px 10px;border-radius:6px;
+  border:1px solid var(--border);background:transparent;color:var(--ink-soft);font-size:12px;
+  text-decoration:none;white-space:nowrap}
+.card .actions .offline:hover{border-color:var(--accent);color:var(--accent)}
+.danger:hover{border-color:var(--danger);color:var(--danger)}
+.empty{color:var(--ink-soft);font-size:13px;text-align:center;padding:30px 0}
+.boot{margin:0 0 18px;padding:12px 14px;border:1px solid var(--danger);border-left-width:4px;
+  border-radius:8px;background:rgba(192,80,63,.12);color:var(--ink);font-size:13px;line-height:1.7}
+.boot code{background:var(--panel2);border:1px solid var(--border);border-radius:4px;
+  padding:1px 5px;font-size:12.5px;font-family:Consolas,Menlo,monospace}

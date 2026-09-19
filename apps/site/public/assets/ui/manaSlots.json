@@ -1,0 +1,312 @@
+{
+ "schema": 1,
+ "count": 46,
+ "savegameVersionBranch": "ge35",
+ "slots": [
+  {
+   "index": 0,
+   "key": "buy_idea",
+   "name": "购买理念",
+   "en": "Ideas"
+  },
+  {
+   "index": 1,
+   "key": "advance_tech",
+   "name": "提升科技",
+   "en": "Advance Tech"
+  },
+  {
+   "index": 2,
+   "key": "boost_stab",
+   "name": "提升稳定度",
+   "en": "Boost Stab"
+  },
+  {
+   "index": 3,
+   "key": "buy_general",
+   "name": "招募将军",
+   "en": "General"
+  },
+  {
+   "index": 4,
+   "key": "buy_admiral",
+   "name": "招募海军上将",
+   "en": "Admirals"
+  },
+  {
+   "index": 5,
+   "key": "buy_conq",
+   "name": "招募征服者",
+   "en": "Conquistadors"
+  },
+  {
+   "index": 6,
+   "key": "buy_explorer",
+   "name": "招募探险家",
+   "en": "Explorers"
+  },
+  {
+   "index": 7,
+   "key": "develop_prov",
+   "name": "发展省份",
+   "en": "Develop Prov"
+  },
+  {
+   "index": 8,
+   "key": "force_march",
+   "name": "强行军",
+   "en": "Force March"
+  },
+  {
+   "index": 9,
+   "key": "assault",
+   "name": "强攻",
+   "en": "Assault"
+  },
+  {
+   "index": 10,
+   "key": "seize_colony",
+   "name": "夺取殖民地",
+   "en": "Seize Colony"
+  },
+  {
+   "index": 11,
+   "key": "burn_colony",
+   "name": "焚毁殖民地",
+   "en": "Burn Colony"
+  },
+  {
+   "index": 12,
+   "key": "attack_natives",
+   "name": "攻击土著",
+   "en": "Attack Natives"
+  },
+  {
+   "index": 13,
+   "key": "scorch_earth",
+   "name": "焦土",
+   "en": "Scorch Earth"
+  },
+  {
+   "index": 14,
+   "key": "demand_non_wargoal_prov",
+   "name": "无理要求",
+   "en": "Unjustified Demands"
+  },
+  {
+   "index": 15,
+   "key": "reduce_inflation",
+   "name": "降低通货膨胀",
+   "en": "Reduce Inflation"
+  },
+  {
+   "index": 16,
+   "key": "move_capital",
+   "name": "迁都",
+   "en": "Move Capital"
+  },
+  {
+   "index": 17,
+   "key": "make_province_core",
+   "name": "核心化省份",
+   "en": "Core Province"
+  },
+  {
+   "index": 18,
+   "key": "replace_rival",
+   "name": "更换宿敌",
+   "en": "Replace Rival"
+  },
+  {
+   "index": 19,
+   "key": "change_gov",
+   "name": "变更政体",
+   "en": "Change Govt."
+  },
+  {
+   "index": 20,
+   "key": "change_culture",
+   "name": "变更文化",
+   "en": "Change Culture"
+  },
+  {
+   "index": 21,
+   "key": "harsh_treatment",
+   "name": "严厉镇压",
+   "en": "Harsh Treatment"
+  },
+  {
+   "index": 22,
+   "key": "reduce_we",
+   "name": "降低战争疲劳",
+   "en": "Reduce W.E."
+  },
+  {
+   "index": 23,
+   "key": "boost_faction",
+   "name": "提升派系",
+   "en": "Boost Faction"
+  },
+  {
+   "index": 24,
+   "key": "raise_war_taxes",
+   "name": "征收战争税",
+   "en": "Raise War Taxes"
+  },
+  {
+   "index": 25,
+   "key": "increse_tariffs",
+   "name": "提高关税",
+   "en": "Increase Tariffs"
+  },
+  {
+   "index": 26,
+   "key": "promote_merc",
+   "name": "提升重商主义",
+   "en": "Promote Merc"
+  },
+  {
+   "index": 27,
+   "key": "decrease_tariffs",
+   "name": "降低关税",
+   "en": "Decrease Tariffs"
+  },
+  {
+   "index": 28,
+   "key": "move_trade_port",
+   "name": "迁移贸易城市",
+   "en": "Move Trade City"
+  },
+  {
+   "index": 29,
+   "key": "create_trade_post",
+   "name": "建立贸易站",
+   "en": "Create Trade Post"
+  },
+  {
+   "index": 30,
+   "key": "siege_sorties",
+   "name": "突围",
+   "en": "Sortie"
+  },
+  {
+   "index": 31,
+   "key": "buy_religious_reform",
+   "name": "教会改革",
+   "en": "Religious Reform"
+  },
+  {
+   "index": 32,
+   "key": "set_primary_culture",
+   "name": "变更主流文化",
+   "en": "Culture Shift"
+  },
+  {
+   "index": 33,
+   "key": "add_accepted_culture",
+   "name": "增加接纳文化",
+   "en": "Add Culture"
+  },
+  {
+   "index": 34,
+   "key": "remove_accepted_culture",
+   "name": "移除接纳文化",
+   "en": "Remove Culture"
+  },
+  {
+   "index": 35,
+   "key": "strengthen_government",
+   "name": "强化政府",
+   "en": "Strengthen Govt."
+  },
+  {
+   "index": 36,
+   "key": null,
+   "name": "其他"
+  },
+  {
+   "index": 37,
+   "key": "artillery_barrage",
+   "name": "炮兵轰击",
+   "en": "Artillery Barrage"
+  },
+  {
+   "index": 38,
+   "key": "establish_siberian_frontier",
+   "name": "建立西伯利亚边疆",
+   "en": "Siberian Frontier"
+  },
+  {
+   "index": 39,
+   "key": null,
+   "name": "其他"
+  },
+  {
+   "index": 40,
+   "key": "naval_barrage",
+   "name": "海军轰击",
+   "en": "Naval Barrage"
+  },
+  {
+   "index": 41,
+   "key": "add_tribal_land",
+   "name": "分配部落土地",
+   "en": "Add Tribal Land"
+  },
+  {
+   "index": 42,
+   "key": null,
+   "name": "其他"
+  },
+  {
+   "index": 43,
+   "key": "force_march",
+   "name": "强行军（与下标 8 合并）",
+   "en": "Force March"
+  },
+  {
+   "index": 44,
+   "key": "create_leader",
+   "name": "招募将领",
+   "en": "Create Leader"
+  },
+  {
+   "index": 45,
+   "key": "enforce_culture",
+   "name": "强制文化",
+   "en": "Enforce Culture"
+  }
+ ],
+ "beyondContract": [
+  {
+   "index": 46,
+   "key": "effect",
+   "name": "效果",
+   "en": "Effect"
+  },
+  {
+   "index": 47,
+   "key": "minority_expulsion",
+   "name": "驱逐少数族群",
+   "en": "Minority Expulsion"
+  },
+  {
+   "index": 48,
+   "key": "other",
+   "name": "其他",
+   "en": "Other"
+  },
+  {
+   "index": 49,
+   "key": "other",
+   "name": "其他",
+   "en": "Other"
+  },
+  {
+   "index": 50,
+   "key": "other",
+   "name": "其他",
+   "en": "Other"
+  }
+ ]
+}

@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<!-- 第四对话任务书.md §4.3 C3: without this a phone renders the desktop layout shrunk to
+     fit and nothing is tappable. The catalogue page has had one all along; this is the
+     viewer catching up. `viewport-fit=cover` keeps the map usable under a notch. -->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>月度版图时间线</title>
+<style>
+ /* Slate: the cool dark UI. Every colour is a variable so the whole page can be
+    restyled from one place. */
+ :root{
+   --bg:#0f1115; --panel:rgba(22,26,33,.88); --panel2:#1b212b; --ink:#e6e6e6; --ink-soft:#8a93a3;
+   --accent:#4b8fd6; --accent-ink:#08121c; --border:#263042; --border-soft:#1e2530;
+   --shadow:0 6px 18px rgba(0,0,0,.30);
+   --ok:#3fa76a; --warn:#c9a227; --danger:#c0503f;
+   --radius:6px; --radius-lg:10px;
+   --font:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+   --map-bg:#0b0d11; --chart-bg:rgba(18,22,29,.82); --chart-axis:#2b3648; --chart-label:#6f7d90;
+   color-scheme:dark;
+ }
+ /* Selectable looks. Slate is the default above and needs no override. */
+ body[data-theme=parchment]{
+   --bg:#ece1c9; --panel:rgba(250,244,229,.90); --panel2:#f2e8d2; --ink:#3a3126; --ink-soft:#7a6a53;
+   --accent:#8a5a2b; --accent-ink:#fff8ec; --border:#d3c1a0; --border-soft:#e0d2b6;
+   --shadow:0 1px 0 #fff inset,0 6px 18px rgba(90,70,40,.16);
+   --ok:#3d8f5d; --warn:#a9821f; --danger:#a8442f;
+   --radius:4px; --radius-lg:6px;
+   --font:"Songti SC","Source Han Serif SC","Noto Serif CJK SC",Georgia,"Microsoft YaHei",serif;
+   --map-bg:#e2d6bd; --chart-bg:rgba(247,240,223,.90); --chart-axis:#cbb894; --chart-label:#8a7a5f;
+   color-scheme:light;
+ }
+ body[data-theme=royal]{
+   --bg:#14110c; --panel:rgba(30,25,19,.90); --panel2:#241d15; --ink:#eadfc6; --ink-soft:#a2916f;
+   --accent:#c9a227; --accent-ink:#1a1408; --border:#3d3324; --border-soft:#31291d;
+   --shadow:0 1px 0 rgba(255,236,180,.06) inset,0 6px 20px rgba(0,0,0,.5);
+   --ok:#4fbf87; --warn:#d8b03c; --danger:#c9603f;
+   --map-bg:#0c0a07; --chart-bg:rgba(26,21,16,.88); --chart-axis:#4a3d28; --chart-label:#a2916f;
+   color-scheme:dark;
+ }
+ body[data-theme=light]{
+   --bg:#f2f4f8; --panel:rgba(255,255,255,.92); --panel2:#f7f9fc; --ink:#1d2530; --ink-soft:#67758a;
+   --accent:#2563eb; --accent-ink:#ffffff; --border:#dde4ee; --border-soft:#eaeff6;
+   --shadow:0 1px 2px rgba(16,24,40,.06),0 8px 24px rgba(16,24,40,.06);
+   --ok:#2f9e63; --warn:#b8860b; --danger:#c0392b;
+   --font:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+   --map-bg:#e8edf5; --chart-bg:rgba(255,255,255,.94); --chart-axis:#dde4ee; --chart-label:#8b97a8;
+   color-scheme:light;
+ }
+ /* Nav chrome and the wallpaper scrim follow the theme as well. Declaring them
+    in their own rules keeps the theme blocks above readable. */
+ :root{--nav-bg:#16233a;--nav-glass:rgba(22,35,58,.62);--nav-ink:#c7d7ef;--nav-btn:#1f3151;--nav-btn-hover:#27405f;--dim:#000000}
+ body[data-theme=parchment]{--nav-bg:#e3d5b6;--nav-glass:rgba(252,248,236,.66);--nav-ink:#4a3c28;--nav-btn:#f6efdd;--nav-btn-hover:#fbf6ea;--dim:#fdf7e9}
+ body[data-theme=royal]{--nav-bg:#1a140c;--nav-glass:rgba(26,20,12,.62);--nav-ink:#eadfc6;--nav-btn:#2b2216;--nav-btn-hover:#3a2e1c;--dim:#0b0803}
+ body[data-theme=light]{--nav-bg:#ffffff;--nav-glass:rgba(255,255,255,.66);--nav-ink:#1d2530;--nav-btn:#eef2f8;--nav-btn-hover:#e2e9f4;--dim:#ffffff}
+ /* The settings panels and their thumbnail grid follow the theme too. */
+ :root{--menu-bg:#18263d;--menu-ink:#dbe7f5;--menu-hover:#22375a;--menu-border:#2c4670;--menu-soft:#b9c9de;--thumb-bg:#0d1522}
+ body[data-theme=parchment]{--menu-bg:#f7f0dd;--menu-ink:#3f3524;--menu-hover:#efe5cd;--menu-border:#d3c1a0;--menu-soft:#6d5c42;--thumb-bg:#e6dcc4}
+ body[data-theme=royal]{--menu-bg:#221a11;--menu-ink:#eadfc6;--menu-hover:#3a2e1c;--menu-border:#4a3b25;--menu-soft:#c0ad86;--thumb-bg:#100c07}
+ body[data-theme=light]{--menu-bg:#ffffff;--menu-ink:#1d2530;--menu-hover:#eef2f8;--menu-border:#dde4ee;--menu-soft:#67758a;--thumb-bg:#eef2f8}
+ /* Tables and menus must stay readable over any wallpaper. */
+ body[data-theme=parchment] table,body[data-theme=light] table{background:rgba(255,255,255,.86)}
+ body[data-theme=parchment] th,body[data-theme=light] th{background:#f0e9db}
+ body[data-theme=royal] table{background:rgba(12,10,7,.86)}
+ body[data-theme=royal] th{background:#1a1510}
+ /* Menus and settings rows follow the theme as well. */
+ *{box-sizing:border-box}
+ body{margin:0;padding:26px 24px 60px;background:var(--bg);color:var(--ink);font-family:var(--font);
+   font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+ h1{margin:0 0 4px;font-size:23px;letter-spacing:.4px;font-weight:600}
+ h2{margin:34px 0 12px;font-size:15px;color:var(--ink);border-bottom:1px solid var(--border);padding-bottom:7px;
+   letter-spacing:.6px;text-transform:none}
+ .sub{color:var(--ink-soft);font-size:12.5px;margin-bottom:18px}
+ .player{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);
+   padding:14px;box-shadow:var(--shadow)}
+ canvas{width:100%;display:block;transform-origin:0 0}
+ /* Zoom/pan: the canvas is CSS-transformed inside a clipping wrapper, so panning
+    never covers the rest of the page and the pixel art stays crisp. */
+ .view{position:relative;overflow:hidden;border-radius:var(--radius);background:var(--map-bg);
+   border:1px solid var(--border);cursor:default;touch-action:none}
+ /* The pointer stays the plain arrow over the map, dragging included (user, 2026-09-19):
+     a 抓手 cursor promises "you can push this picture around" when the map is really a
+     document you read. The panel's own buttons keep `pointer`, so a control still looks
+     like one, and `touch-action:none` stays because a drag must not scroll the page. */
+  .view canvas{cursor:default}
+ .zoom{display:inline-flex;gap:6px;flex:0 0 auto}
+ .zoom button{padding:5px 10px;font-variant-numeric:tabular-nums}
+ /* The view buttons stay on one line and wrap as a group, so a narrow window
+    never splits the row in half. */
+ .views{display:inline-flex;gap:6px;flex-wrap:nowrap;flex:0 0 auto}
+ .bar{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+ .date{font-size:21px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;min-width:118px;
+   font-family:var(--font)}
+ input[type=range]{flex:1;min-width:220px;accent-color:var(--accent);height:22px}
+ /* The speed slider sits inline next to the play button, so it must not take the
+    flexible full-width sizing the timeline slider uses. */
+ .speed{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto}
+ #speed,#speedUp,#speedDown{accent-color:var(--accent)}
+ #speed{flex:0 0 88px;min-width:88px;width:88px}
+ #speedVal{font-size:12px;color:var(--ink-soft);min-width:26px;font-variant-numeric:tabular-nums;text-align:right}
+ button{background:var(--panel2);color:var(--ink);border:1px solid var(--border);
+   border-radius:var(--radius);padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:var(--font);
+   transition:background .12s,border-color .12s,color .12s}
+ button:hover{background:var(--panel);border-color:var(--accent);color:var(--accent)}
+ button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+ #play{font-size:14px;min-width:42px}
+ .stats{color:var(--ink-soft);font-size:12.5px;margin-top:10px;min-height:18px}
+ .legend{display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--ink-soft);flex-wrap:wrap;align-items:center}
+ .sw{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:4px}
+ .hatch{display:inline-block;width:22px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:5px;
+   background-image:repeating-linear-gradient(135deg,#2ecc71 0 4px,#b38068 4px 8px)}
+ .hatch.battle{background-image:linear-gradient(90deg,#f6f6f6,#f6b05c,#a81a1a)}
+ .hatch.naval{background-image:linear-gradient(90deg,#e8f0fa,#569cc4,#a81a1a)}
+ .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ink-soft);cursor:pointer;
+   padding:2px 6px;border:1px solid transparent;border-radius:var(--radius)}
+ .chip:hover{border-color:var(--border)}
+ .chip.off{opacity:var(--chip-off)}
+ table{border-collapse:collapse;font-size:12.5px;width:100%;
+   background:rgba(9,12,16,.80);box-shadow:0 0 0 1px var(--border-soft)}
+ th,td{padding:5px 9px;border-bottom:1px solid var(--border-soft);text-align:left;vertical-align:top}
+ th{color:var(--ink-soft);font-weight:600;position:sticky;top:0;background:#10141a;letter-spacing:.3px}
+ /* Sortable headers (第四对话任务书.md §3.3): a header that sorts is a control, so it gets
+    the pointer cursor and a hover tint. The two-part selector on the last rule beats the
+    .dTable th rule further down, which repaints the sheet's own headers. The map stays
+    default — the user asked for the basic cursor shape everywhere on the map. */
+ th[data-sort]{cursor:pointer;user-select:none;white-space:nowrap}
+ th[data-sort]:hover{color:var(--accent)}
+ th[data-sort][aria-sort]{color:var(--accent)}
+ tr:hover td{background:rgba(255,255,255,.035)}
+ td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+ td.terms{color:var(--ink-soft);max-width:270px}
+ td.d,.d{color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+ .tag{color:var(--ink-soft);font-size:11px} .ong{color:var(--accent)}
+ ul{margin:0;padding-left:20px;font-size:13px;line-height:1.85} b{color:var(--ink)}
+ svg#chart{border:1px solid var(--border) !important;background:var(--chart-bg) !important}
+ /* Wallpaper carousel: two layers cross-fade, and every image is cropped to the
+    viewport by background-size:cover, so they all share one aspect ratio
+    without touching the files. The black scrim sits on top of both. */
+ #bg{position:fixed;inset:0;z-index:-2;background:#07090c}
+ .bgLayer{position:absolute;inset:0;background-position:center;background-size:cover;
+   opacity:0;transition:opacity 1.6s ease-in-out}
+ .bgLayer.on{opacity:1}
+ #bgDim{position:fixed;inset:0;z-index:-1;background:var(--dim);opacity:.66;pointer-events:none}
+ .player{backdrop-filter:blur(2px)}
+ .flag{width:22px;height:16px;object-fit:cover;vertical-align:-3px;margin-right:6px;border-radius:2px;
+   border:1px solid var(--border-soft);background:var(--panel2)}
+ .flag.big{width:30px;height:22px;vertical-align:-6px}
+ /* Flags with a colonial overlay. A colonial nation has no artwork of its own: it is
+    drawn as its mother country's flag with the colony's own map colour over the right
+    half. Pure DOM — no canvas, no generated image — so it works on the hosted page,
+    in the self-contained file and straight off disk alike. The vertical-align mirrors
+    the image's own, because the wrapper is now the inline-level box. */
+ .flagBox{position:relative;display:inline-block;line-height:0;vertical-align:-3px}
+ .flagBox>img{display:block}
+ .flagTint{position:absolute;left:50%;top:0;width:50%;height:100%;pointer-events:none}
+ /* ---- top navigation -------------------------------------------------- */
+ /* Acrylic chrome (user ask, 3rd round): the wallpaper must stay visible through a
+    frosted pane, on all four themes. The tint is a theme variable because a single
+    rgba() cannot be right for both a slate dark and a parchment light, and the
+    opaque --nav-bg stays underneath as the fallback: an engine without
+    backdrop-filter gets exactly the chrome it had before. The same recipe is used on
+    the catalogue's own navigation, so the two pages look like one site. */
+ #nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:12px;
+   margin:-26px -24px 18px;padding:10px 18px;background:var(--nav-bg);border-bottom:1px solid rgba(0,0,0,.35);
+   box-shadow:0 2px 12px rgba(0,0,0,.45)}
+ @supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+   #nav{background:var(--nav-glass);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+     backdrop-filter:blur(18px) saturate(1.4)}
+ }
+ #nav .navTitle{flex:1;font-size:13.5px;color:var(--nav-ink);letter-spacing:.6px}
+ #nav button{background:var(--nav-btn);border-color:rgba(128,128,128,.35);color:var(--nav-ink);min-width:38px;font-size:14px}
+ #nav button:hover{background:var(--nav-btn-hover);border-color:var(--accent);color:var(--accent)}
+ .menu{position:absolute;z-index:45;display:none;min-width:186px;background:var(--menu-bg);
+   border:1px solid var(--menu-border);border-radius:var(--radius);padding:6px;
+   box-shadow:0 10px 28px rgba(0,0,0,.45)}
+ .menu.open{display:block}
+ .menu .mi{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--menu-ink);
+   padding:7px 10px;border-radius:4px;font-size:12.5px}
+ .menu .mi:hover{background:var(--menu-hover);color:var(--accent)}
+ .menu .mi.on::after{content:" ✓";color:var(--accent)}
+ .menu .sep{height:1px;background:var(--menu-border);margin:5px 6px}
+ .menu .row{display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:12px;color:var(--menu-soft)}
+ .menu .row input[type=range]{flex:0 0 92px;min-width:92px}
+ .menu .row input[type=number]{flex:0 0 58px;width:58px;min-width:58px;padding:3px 6px;font-size:12px;
+   text-align:right;font-variant-numeric:tabular-nums;border-radius:4px;
+   background:var(--thumb-bg);color:var(--menu-ink);border:1px solid var(--menu-border)}
+ .menu .row span{font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+ #panel1{right:16px;top:46px} #panel2{right:210px;top:46px} #panel3{right:404px;top:46px;width:246px}
+ .bgList{max-height:262px;overflow-y:auto;overflow-x:hidden;padding:5px}
+ /* Thumbnail tiles. The originals are large JPEGs and there is no image library
+    on this machine to pre-shrink them, so the tiles use loading="lazy" and the
+    browser only fetches the ones actually scrolled into view. */
+ #bgList{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+ .bgThumb{position:relative;padding:0;height:72px;border:1px solid var(--menu-border);border-radius:4px;
+   overflow:hidden;background:var(--thumb-bg);cursor:pointer}
+ .bgThumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:.5;border:0;border-radius:0}
+ .bgThumb:hover img{opacity:.8}
+ .bgThumb.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+ .bgThumb.on img{opacity:1}
+ .bgThumb .n{position:absolute;left:3px;bottom:1px;font-size:9px;color:#e8f0fa;text-shadow:0 0 3px #000}
+ body[data-theme=parchment] .bgThumb .n,body[data-theme=light] .bgThumb .n{color:#1d2530;text-shadow:0 0 3px #fff}
+  /* The archive-info drawer (📝): title, mods, end date and the protagonists the
+     catalogue card prints. It is *not* a floating control any more — the bottom-right
+     corner belongs to the shared 🎨 button (page-theme.js), and a control that edits
+     this document belongs on the line that names it. The button therefore sits at the
+     right end of the <h1> row and the panel opens from under it, which is why #headRow
+     is the positioned ancestor. Only the styles live here; the button itself is built
+     by viewer.js, because the generated standalone page must not grow it at all: there
+     is no catalogue record to edit behind a file on disk, so the client returns before
+     building anything unless the host handed it a VIEWER_META.id. */
+  .headrow{position:relative;display:flex;align-items:center;gap:12px}
+  .headrow h1{flex:1 1 auto;min-width:0}
+  /* Click-to-rename is granted by the client (hosted page only), never by the markup:
+     the standalone file keeps a plain, non-interactive heading. */
+  .renameable{cursor:pointer;border-bottom:1px dashed var(--border-soft)}
+  .renameable:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  #profileBtn{flex:0 0 auto;margin-left:auto;display:inline-flex;align-items:center;gap:6px;
+    border:1px solid var(--border);background:var(--panel);color:var(--ink);border-radius:var(--radius);
+    padding:6px 11px;cursor:pointer;box-shadow:var(--shadow);font-family:var(--font);font-size:12.5px;
+    white-space:nowrap}
+  #profileBtn:hover{border-color:var(--accent);color:var(--accent)}
+  #titleStatus{flex:0 0 auto;color:var(--ink-soft);font-size:12px;white-space:nowrap}
+  /* A narrow window keeps the 📝 and drops the words, so the heading is not squeezed. */
+  @media (max-width:900px){#profileBtn .lbl{display:none}}
+  #profilePanel{position:absolute;right:0;top:calc(100% + 6px);z-index:50;width:326px;max-height:70vh;overflow:auto;
+    background:var(--panel);color:var(--ink);border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:12px;font:13px/1.6 var(--font);box-shadow:0 10px 30px rgba(0,0,0,.35);display:none}
+  #profilePanel.open{display:block}
+  #profilePanel h4{margin:0 0 8px;font-size:12px;color:var(--ink-soft);font-weight:600;letter-spacing:.4px}
+  #profilePanel .prow{display:flex;align-items:center;gap:6px;margin:6px 0}
+  #profilePanel .prow label{flex:0 0 58px;color:var(--ink-soft);font-size:12px}
+  #profilePanel input[type=text]{flex:1;min-width:0;background:var(--panel2);color:var(--ink);
+    border:1px solid var(--border);border-radius:var(--radius);padding:4px 6px;font-family:var(--font);font-size:12.5px}
+  #profilePanel button{background:var(--panel2);color:var(--ink);border:1px solid var(--border);
+    border-radius:var(--radius);padding:5px 10px;cursor:pointer;font-family:var(--font);font-size:12.5px}
+  #profilePanel button:hover{border-color:var(--accent);color:var(--accent)}
+  #profilePanel .sep{height:1px;background:var(--border-soft);margin:10px 0}
+  #profilePanel .note{color:var(--ink-soft);font-size:11.5px;margin:4px 0}
+  #profileStatus{color:var(--ink-soft);font-size:12px;margin-left:8px}
+  /* The TAG picker: clicking a protagonist's TAG field opens the great powers underneath
+     it, so a tag can be picked instead of remembered. It stays *in flow* rather than
+     floating: the panel is the scroll container, and an absolutely positioned overlay
+     would be clipped at its edge, while a block that pushes the rows below down cannot.
+     The max-height + overflow-y pair is the "滚轮可滑动" the user asked for and works with
+     a wheel, a trackpad and the keyboard alike. Manual typing is untouched — the input is
+     still a plain text field. */
+  #profilePanel .prow.trow{flex-wrap:wrap}
+  #profilePanel .taglist{flex:1 0 100%;display:none;max-height:172px;overflow-y:auto;margin-top:3px;
+    border:1px solid var(--menu-border);border-radius:var(--radius);background:var(--menu-bg);
+    box-shadow:0 6px 18px rgba(0,0,0,.28)}
+  #profilePanel .taglist.open{display:block}
+  #profilePanel .taglist button{display:block;width:100%;text-align:left;background:transparent;
+    border:0;border-radius:0;color:var(--menu-ink);padding:4px 9px;font-size:12px;line-height:1.5}
+  #profilePanel .taglist button:hover{background:var(--menu-hover);color:var(--accent);border:0}
+  #profilePanel .taglist .pickHint{color:var(--menu-soft);font-size:11.5px;padding:4px 9px}
+  /* The protagonist flag strip: the countries the player ran, in the heading row immediately
+     left of 📝 — the same block the catalogue card prints, five to a page. Built by viewer.js
+     on the hosted page only (a file on disk has no custom.protagonists behind it), so these
+     are the styles for whatever the client renders, never a declaration of the block itself.
+     The arrows exist only when there is a second page; the ends disable the arrow that would
+     step past them, which mirrors the card. */
+  #heroStrip{flex:0 0 auto;display:flex;align-items:center;gap:4px;max-width:52vw}
+  #heroStrip .heroItems{display:flex;align-items:flex-start;gap:7px;min-width:0;overflow:hidden}
+  #heroStrip .heroFig{display:flex;flex-direction:column;align-items:center;gap:2px;width:46px}
+  #heroStrip .heroFlag{width:26px;height:19px;object-fit:cover;border:1px solid var(--border-soft);
+    border-radius:2px;background:var(--panel2)}
+  #heroStrip .heroCap{max-width:46px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-size:9.5px;line-height:1.15;color:var(--ink-soft);text-align:center}
+  #heroStrip .heroFallback{display:inline-block;padding:2px 4px;border:1px solid var(--border-soft);
+    border-radius:2px;background:var(--panel2);color:var(--ink-soft);font-size:9px;line-height:1.3}
+  #heroStrip .heroPage{flex:0 0 auto;padding:2px 6px;font-size:11px;line-height:1.1}
+  #heroStrip .heroPage[disabled]{opacity:.4;cursor:default}
+  /* A narrow window keeps the heading on one line by dropping the captions first. */
+  @media (max-width:900px){#heroStrip .heroCap{display:none}}
+  /* ---- the province / country detail sheet --------------------------------
+     pdx-tools pins a sheet to the map's edge showing whatever is selected, and swaps
+     it for a country drawer when you step through a flag or a province. The panel is
+     therefore a *projection of the selection*, not a widget with state of its own:
+     it is a plain absolutely-positioned box inside #view, so the map underneath stays
+     draggable, zoomable and hoverable while it is open (the user's ③ in 第三对话任务书.md
+     §5 asked for exactly that). #view is the clipping wrapper, so the sheet can never
+     wander off the map.
+     The four ids (#detail / #detailBack / #detailTitle / #detailClose / #detailBody)
+     and the button ids are the frozen contract in 第三对话任务书.md §1.6; both hosts get
+     this markup for free because it is the one shared page.
+     The tint lives on ::before rather than on #detail, which is what makes the 🎨 面板
+     slider fade the sheet without fading a single glyph of text: the layer behind the
+     content changes, the content does not. --detail-base is the theme's opaque panel
+     colour (--panel is already translucent and would double up). */
+  #hover{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+  :root{--panel-opacity:.88;--detail-base:#161a21}
+  body[data-theme=parchment]{--detail-base:#faf4e5}
+  body[data-theme=royal]{--detail-base:#1e1913}
+  body[data-theme=light]{--detail-base:#ffffff}
+  #detail{position:absolute;left:0;top:0;height:100%;width:auto;aspect-ratio:.618;z-index:5;
+    display:flex;flex-direction:column;overflow:hidden;color:var(--ink);
+    border:1px solid var(--border);border-left:0;border-radius:0 var(--radius-lg) var(--radius-lg) 0;
+    box-shadow:var(--shadow)}
+  #detail[hidden]{display:none}
+  #detail::before{content:"";position:absolute;inset:0;background:var(--detail-base);
+    opacity:var(--panel-opacity,.88);pointer-events:none}
+  #detail>*{position:relative}
+  /* The country drawer is the same box: pdx-tools widens it because a country has far
+     more to say than a province, so the aspect ratio is released and it keeps the map
+     edge it already owns. */
+  #detail.country{aspect-ratio:auto;width:min(880px,80%)}
+  .dHead{display:flex;align-items:center;gap:8px;padding:7px 9px;
+    border-bottom:1px solid var(--border-soft);flex:0 0 auto}
+  .dHead button{padding:3px 8px;font-size:12px;line-height:1.35;flex:0 0 auto}
+  #detailTitle{flex:1 1 auto;min-width:0;font-weight:600;font-size:14px;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  #detailClose{padding:3px 7px}
+  .dBody{flex:1 1 auto;min-height:0;overflow:auto;padding:9px 11px 18px;font-size:12.5px}
+  .dRow{display:flex;gap:8px;align-items:baseline;margin:5px 0}
+  .dRow .k{flex:0 0 72px;color:var(--ink-soft)}
+  .dRow .v{flex:1 1 auto;min-width:0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+  .dRow .v.dim{color:var(--ink-soft)}
+  .dRow .v.hot{color:var(--accent);font-weight:600}
+  .dSec{margin:13px 0 6px;font-size:12px;font-weight:600;color:var(--ink-soft);letter-spacing:.4px;
+    border-bottom:1px solid var(--border-soft);padding-bottom:4px;display:flex;align-items:center;gap:6px}
+  .dSec .dSecNote{font-weight:400;font-size:11px}
+  .dNote{color:var(--ink-soft);font-size:11px;margin:4px 0 0;line-height:1.45}
+  .dTable{border-collapse:collapse;width:100%;font-size:12px;background:transparent}
+  .dTable th,.dTable td{padding:3px 6px;border-bottom:1px solid var(--border-soft);text-align:left;
+    vertical-align:top}
+  .dTable th{background:transparent;color:var(--ink-soft);font-size:11px;font-weight:600;position:static}
+  .dTable td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .dTable tr:hover td{background:transparent}
+  .dGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px 4px;margin:6px 0 2px}
+  .dCell{display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-width:0;
+    text-align:center;vertical-align:top}
+  .dSlot{display:inline-flex;align-items:center;gap:4px;vertical-align:middle}
+  .dName{font-size:12.5px}
+  /* The country drawer's header block: flag (or 国家娘) on the left, the country name beside
+     it. The name's size is the catalogue card's country name (style.css line 130: the
+     protagonist caption is 11px), and a long name wraps instead of being cut short. */
+  .dCtryHead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 10px}
+  .dCtryHead .dSlot{flex:0 1 auto;min-width:0}
+  .dCtryHead .dName{font-size:11px;color:var(--ink);overflow-wrap:anywhere}
+  .dChip{display:inline-block;border:1px solid var(--border-soft);border-radius:3px;background:var(--panel2);
+    color:var(--ink-soft);font-size:10.5px;padding:0 4px;margin:0 3px 2px 0}
+  .dIcon{width:32px;height:32px;object-fit:contain;display:block}
+  .dIconFallback{display:flex;align-items:center;justify-content:center;width:32px;height:32px;
+    border:1px solid var(--border);border-radius:4px;background:var(--panel2);color:var(--ink-soft);
+    font-size:9px;line-height:1.05;padding:1px;overflow:hidden;text-align:center;overflow-wrap:anywhere}
+  .dCap{font-size:10px;color:var(--ink-soft);line-height:1.15;max-width:100%;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .dIconRow{display:flex;flex-wrap:wrap;gap:7px;align-items:flex-start}
+  /* Panel flags are the catalogue card's protagonist flags, size for size (user, 2026-09-19:
+     跟目录页卡片主要国家的旗帜一致). The numbers below are copied from style.css lines 121-123 —
+     48x48 box, 4px radius, hairline --border-soft, --panel2 behind it, object-fit:contain —
+     and the wrapper/img/tint triple further down stays the frozen one both pages share, so a
+     colonial nation is still its mother country's flag with its own colour on the right half. */
+  .detailFlagBox{position:relative;display:inline-block;line-height:0;vertical-align:middle;
+    width:48px;height:48px;border-radius:4px;border:1px solid var(--border-soft);
+    background:var(--panel2);overflow:hidden;cursor:pointer;flex:0 0 auto}
+  .detailFlagBox>img{display:block;width:100%;height:100%;object-fit:contain}
+  .detailFallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+    font-size:11px;color:var(--ink-soft);letter-spacing:.5px;font-variant-numeric:tabular-nums}
+  .dSw{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:4px}
+  .dLink{background:transparent;border:0;color:var(--accent);cursor:pointer;font-family:var(--font);
+    font-size:12px;padding:2px 5px;border-radius:4px}
+  .dLink:hover{background:var(--panel2);border:0}
+  .dGo{background:transparent;border:1px solid var(--border-soft);color:var(--ink-soft);cursor:pointer;
+    font-family:var(--font);font-size:11px;line-height:1;padding:2px 4px;border-radius:4px;flex:0 0 auto}
+  .dGo:hover{border-color:var(--accent);color:var(--accent)}
+  .dGo.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+  .dHistRow{display:flex;gap:7px;align-items:baseline;margin:3px 0}
+  .dHistRow .dWhen{flex:0 0 82px;color:var(--ink-soft);font-variant-numeric:tabular-nums;font-size:11.5px}
+  .dHistRow .dWhat{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+  .dTabs{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 9px}
+  .dTabs button{padding:3px 9px;font-size:12px}
+  .dTabs button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+  .dTabs button[disabled]{opacity:.42;cursor:default}
+  .dTabs button[disabled]:hover{background:var(--panel2);border-color:var(--border);color:var(--ink)}
+  /* Wave 2 (建筑 / 州 / 阶级 / 顾问). The bar chart is plain DOM: a name, a track and the
+     number, sized in percent of the biggest row, so it follows the theme's variables and needs
+     no canvas. .dBarTrack is reused for the crownland bar, and the estate/advisor cards use
+     the same .dCard box the monarch and idea cards already use. */
+  .dBar{display:flex;align-items:center;gap:8px;margin:2px 0}
+  .dBarName{flex:0 0 96px;font-size:11.5px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap}
+  .dBarTrack{flex:1 1 auto;min-width:48px;height:11px;border-radius:3px;background:var(--border-soft);
+    overflow:hidden}
+  .dBarTrack>i{display:block;height:100%;background:var(--accent);opacity:.85}
+  .dBarVal{flex:0 0 48px;text-align:right;font-size:11.5px;color:var(--ink-soft)}
+  .dCrown{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
+  .dCrown .dCrownLabel{flex:0 0 96px;font-size:11.5px;color:var(--ink)}
+  /* Wave 3 (财政 / 点数 / 思潮). The metric cards, the waterfall, the institution badge and the
+     one-level expense tree. Every bar reuses .dBarTrack, so a bar looks the same everywhere on
+     the page, and the status colours come from the theme's own --ok/--danger/--warn. */
+  .dCards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:4px 0 6px}
+  .dCard.dMetric{display:flex;flex-direction:column;gap:2px;margin:0;padding:7px 9px}
+  .dMetric b{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+  .dPos{color:var(--ok)}
+  .dNeg{color:var(--danger)}
+  .dWaterfall{position:relative;margin:4px 0 2px;border:1px solid var(--border-soft);
+    border-radius:var(--radius);background:var(--panel2);overflow:hidden}
+  .dWfCol{position:absolute;display:block;border-radius:1px;background:var(--accent)}
+  .dWfIn{background:var(--ok)}
+  .dWfOut{background:var(--danger)}
+  .dWfBase{position:absolute;left:0;right:0;height:1px;background:var(--border)}
+  .dLegend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;
+    color:var(--ink-soft);margin:2px 0 0}
+  .dLegend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:-4px}
+  .dBadge{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:2px 0 8px}
+  .dBadge b{font-size:17px}
+  .dTree{margin:2px 0 0;padding-left:16px;font-size:12px;line-height:1.6}
+  .dTree ul{padding-left:16px}
+  .dTree li{margin:1px 0}
+  .dKV{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px 12px;margin:2px 0}
+  .dKV .dRow{margin:2px 0}
+  .dKV .dRow .k{flex:0 0 76px;font-size:11.5px}
+  .dCard{border:1px solid var(--border-soft);border-radius:var(--radius);padding:8px 9px;margin:8px 0}
+  .dCard h5{margin:0 0 6px;font-size:12px;color:var(--ink-soft);font-weight:600;letter-spacing:.3px}
+  .dPip{display:inline-flex;gap:2px;vertical-align:-1px;margin-left:5px}
+  .dPip i{width:7px;height:7px;border-radius:50%;background:var(--border);display:block}
+  .dPip i.on{background:var(--accent)}
+  .dWarn{border:1px solid var(--border-soft);border-left:3px solid var(--accent);border-radius:var(--radius);
+    padding:6px 8px;margin:0 0 9px;color:var(--ink-soft);font-size:11.5px;line-height:1.45}
+  .dMono{font-variant-numeric:tabular-nums}
+  /* ---- full screen (第三对话任务书.md §1.8) ------------------------------
+     The player is lifted out of the page as a fixed, full-viewport column: the map
+     takes every pixel left over and .bar stays pinned along the bottom, which is the
+     one thing the user asked to keep. Everything else on the page is a *direct* child
+     of <body>, so one rule hides the whole frame — the navigation, the heading, the
+     tables and the chart — without touching the player or the detail sheet. */
+  .player.screen{position:fixed;inset:0;z-index:60;margin:0;border-radius:0;border:0;
+    display:flex;flex-direction:column;background:var(--bg)}
+  .player.screen #view{flex:1 1 auto;min-height:0;border-radius:0;border:0}
+  .player.screen .stats,.player.screen .legend{display:none}
+  .player.screen .bar{margin-top:8px}
+  body.screen{overflow:hidden}
+  body.screen>:not(.player):not(script){display:none}
+
+  /* ---- phone layout (第四对话任务书.md §4.3 C3) ---------------------------
+     One media query with both conditions — a coarse pointer or a narrow window — so
+     everything here applies together, and it is *last* in the sheet so these rules win
+     their specificity ties against the desktop rules above. Nothing outside it changes:
+     that is what "桌面零像素变化" means, and what the C3 checklist verifies by repeating
+     the whole desktop walkthrough on the same page. */
+  @media (pointer:coarse), (max-width:820px) {
+    body{padding:6px 8px 40px}
+    .player{padding:9px}
+    /* The sheet becomes a full-screen drawer with its own scroll. `fixed` escapes
+       #view's clipping box on purpose: only the canvases are transformed, so a fixed
+       child really is positioned against the viewport here. */
+    #detail,#detail.country{position:fixed;left:0;top:0;right:0;bottom:0;width:100%;
+      height:100%;aspect-ratio:auto;border:0;border-radius:0}
+    .dBody{padding:10px 12px 28px}
+    /* The thirteen tabs scroll sideways rather than wrapping into a tall stack. */
+    .dTabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:5px}
+    .dTabs button{flex:0 0 auto}
+    /* The five bottom tables scroll sideways: squeezed into a phone's width every column
+       would be unreadable. The wrapper is in the markup, one per table. */
+    .tableScroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .tableScroll table{min-width:620px}
+    /* The curve is 690px tall on a desktop — taller than a phone screen. The inline
+       height on the <svg> is what it beats, hence !important. */
+    svg#chart{height:380px !important}
+    /* Fingers need bigger targets than a mouse: ≥40px on every control in the map bar. */
+    #play,#speedUp,#speedDown,#zoomIn,#zoomOut,#zoomReset,#res,#flagset,#colour,#mapFull,
+    .views button,#detailBack,#detailClose{min-height:40px;padding:8px 12px}
+    .bar input[type=range]{height:34px}
+  }
+
+  /* 用户 2026-09-19 决定：全屏功能仍有问题、不再修复，**只隐藏入口按钮**。
+     代码、样式、事件与断言全部保留（`viewer.js` 的 toggleFullscreen 与 #mapFull 的
+     监听都还在，`frontend.test.ts` / `build-guards.test.ts` 仍要求这个 id 存在）；
+     想恢复只需删掉下面这一条规则。 */
+  #mapFull{display:none}
+</style></head><body>
+<!-- Backgrounds, themes and their panel are not declared here: apps/site/public/page-theme.js
+     owns them (one component for this page and the catalogue, mounted as the floating 🎨
+     button). The copy that used to live here — the ⚙ button, #panel1..#panel3,
+     #bgA/#bgB/#bgDim, #bgList, #dimRange/#dimVal and #bgInterval — is gone.
+     The 📝 archive-info drawer is built by viewer.js and only on the hosted page: the
+     standalone file has no catalogue record to edit, so it must not grow the button.
+     Its styles above are the only part of it that belongs to this shared markup — as is
+     #headRow, the row the client hangs the button and the drawer off, and #heroStrip, the
+     protagonist flags it mounts to the left of that button (also hosted-only, and also
+     removed again when the save has no protagonist). #titleText is the
+     heading's own first segment: the client turns it into a second editor for the same
+     custom.title the drawer edits (plain, non-clickable text on the standalone file). -->
+<nav id="nav">
+  <button id="back" title="返回上一页">←</button>
+  <div class="navTitle">EU4 存档档案馆 · 月度版图时间线</div>
+</nav>
+
+<div class="headrow" id="headRow">
+  <h1><span id="titleText" data-fact="title"></span> · <span data-fact="start"></span> → <span data-fact="end"></span></h1>
+</div>
+<!-- The line under the heading names the archive's own fields (版本 / 结档日期 / 封档日期 /
+     模组), not the parsed frame counts: the counts said nothing about this document and the
+     user asked for the fields a catalogue card shows. The four values arrive as facts —
+     viewer-page.js resolves them from the stored record, render-timeline.ts from the save's
+     meta — so this shared markup stays host-agnostic. Keys must match those hosts. -->
+<div class="sub">版本：<span data-fact="version"></span> · 结档日期：<span data-fact="endDate"></span> · 封档日期：<span data-fact="sealedAt"></span> · 模组：<span data-fact="mods"></span></div>
+
+<div class="player" id="player">
+  <div class="view" id="view">
+    <canvas id="map" width="5632" height="2048"></canvas>
+    <!-- The hover layer is a second canvas rather than a redraw of the first: the map
+        's own pixels are only repainted when the *frame* changes, so a highlight drawn
+         on top has to live somewhere that can be cleared and redrawn on every mouse
+         move without touching them. It carries the same transform as #map (applyView is
+         the single exit for both), which is what keeps it registered while the map is
+         panned and zoomed. -->
+    <canvas id="hover" width="5632" height="2048"></canvas>
+    <!-- The detail sheet. One box serves both panels (第三对话任务书.md §1.6 freezes these
+         ids): the province form is the竖版 0.618 sheet, the country form the same box
+         with .country added. Its content is built by viewer.js — the markup only owns
+         the skeleton, so both hosts (hosted page and the self-contained file) get it. -->
+    <div id="detail" class="detail" hidden>
+      <div class="dHead">
+        <button id="detailBack" type="button"></button>
+        <span id="detailTitle"></span>
+        <button id="detailClose" type="button" title="关闭详情面板">✕</button>
+      </div>
+      <div id="detailBody" class="dBody"></div>
+    </div>
+  </div>
+  <div class="bar">
+    <button id="play">▶</button>
+    <span class="speed" title="播放速度">
+      <input type="range" id="speed" min="1" max="20" value="3" step="1">
+      <span id="speedVal">3×</span>
+      <button id="speedUp" title="提高速度（+1 倍）">+</button>
+      <button id="speedDown" title="降低速度（−1 倍）">−</button>
+    </span>
+    <div class="date" id="date"></div>
+    <input type="range" id="slider" min="0" max="0" value="0" step="1">
+    <span class="zoom" title="地图视图">
+      <button id="zoomIn" title="放大地图">+</button>
+      <button id="zoomOut" title="缩小地图">−</button>
+      <button id="zoomReset" title="复原视图（缩放与位置）">复原</button>
+      <button id="res" title="底图分辨率">分辨率：一半</button>
+      <button id="flagset" title="切换旗帜来源">旗帜：原版</button>
+      <button id="colour" title="按存档里的颜色（重新染色模组的结果）">配色：模组色</button>
+      <button id="mapFull" title="全屏查看地图（下方工具栏保留）">⛶ 全屏</button>
+    </span>
+    <span class="views">
+      <button id="vPol" class="on">政治</button>
+      <button id="vRel">宗教</button>
+      <button id="vCul">文化</button>
+      <button id="vDev">发展度</button>
+      <button id="vTech">科技</button>
+      <button id="vIns">思潮</button>
+      <button id="vDyn">王朝</button>
+      <button id="vHre">神罗</button>
+      <button id="vBat">战斗</button>
+    </span>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="legend">
+    <span><span class="sw" style="background:#1a3454"></span>海洋</span>
+    <span><span class="sw" style="background:#585c62"></span>无主 / 未殖民</span>
+    <span><span class="hatch"></span>政治/宗教/思潮/神罗斜线</span>
+    <span><span class="hatch naval"></span>海战：蓝→红</span>
+    <span><span class="hatch battle"></span>陆战：白→红</span>
+    <span id="peak"></span>
+  </div>
+</div>
+
+<h2>国家兴衰曲线（发展度，按当前月份标点）</h2>
+<div class="note">由省份时间线推导：每个月的「拥有省份发展度之和」。这是存档唯一支持的长期国力曲线——
+收入与军力只有快照（国库账本仅约 45 年窗口），而归属与发展度都有日期。</div>
+<svg id="chart" viewBox="0 0 1200 690" preserveAspectRatio="none" style="width:100%;height:690px;background:#12161d;border:1px solid #263042;border-radius:8px"></svg>
+<div class="legend" id="chartLegend" style="margin-top:8px"></div>
+
+<div class="note" style="margin-top:14px">
+  <b>科技</b>与<b>思潮</b>没有时间线（存档不记录它们的变化），所以这两个视图始终显示
+  存档当日的数据，拖动时间轴时不会变化；它们同样有独立的静态图
+  <code>tmp/preview/tech.png</code>、<code>tmp/preview/institution.png</code>。
+</div>
+
+<h2>列强榜 · 前 15 名</h2>
+<div class="note">按存档当日的<b>时代评分</b>（游戏内 <code>great_power_score</code>，即列强分）排序；兵力为陆军团数（1 团 = 1000 人）。</div>
+<div class="tableScroll">
+<table data-sortable data-table="leader"><thead><tr><th>#</th><th data-sort="text">国名</th><th data-sort="text">Tag</th><th data-sort="num">时代评分</th><th data-sort="num">发展度</th><th data-sort="text">首都</th><th data-sort="text">国教</th><th data-sort="num">月收入</th><th data-sort="num">总兵力</th></tr></thead>
+<tbody id="leaderBody"></tbody></table>
+</div>
+
+<h2>城市发展度排名 · 前 15 名</h2>
+<div class="tableScroll">
+<table data-sortable data-table="city"><thead><tr><th>#</th><th data-sort="text">城市</th><th data-sort="num">发展度</th><th data-sort="text">宗教</th><th data-sort="text">拥有国</th></tr></thead>
+<tbody id="cityBody"></tbody></table>
+</div>
+
+<h2>思潮发源地</h2>
+<div class="note">八个思潮按出现顺序排列；发源地取自存档的 <code>institution_origin</code>。</div>
+<div class="tableScroll">
+<table data-sortable data-table="institution"><thead><tr><th>#</th><th data-sort="text">思潮</th><th data-sort="text">发源地</th><th data-sort="num">省份</th><th data-sort="text">状态</th></tr></thead>
+<tbody id="institutionBody"></tbody></table>
+</div>
+
+<!-- 第四对话任务书.md §3.6. Both rankings are drawn by the client from DATA.rankings; the
+     two notes are filled from rankings.meta at run time, so the weights and the measured
+     coverage are never a second, hand-copied version of the data plane's numbers. -->
+<h2>历史十五个最优秀将军 · 综合评分</h2>
+<div class="note" id="generalNote">数据面待补。</div>
+<div class="tableScroll">
+<table data-sortable data-table="general"><thead><tr>
+  <th>#</th><th data-sort="text">姓名</th><th data-sort="text">国家</th><th data-sort="text">类型</th>
+  <th data-sort="num">能力合计</th><th data-sort="num">参战</th><th data-sort="num">胜</th>
+  <th data-sort="num">胜率</th><th data-sort="num">造成伤亡</th><th data-sort="num">自身伤亡</th>
+  <th data-sort="num">净杀伤</th><th data-sort="num">综合评分</th>
+</tr></thead><tbody id="generalBody"></tbody></table>
+</div>
+
+<h2>十五个最优秀君主 · 综合评分</h2>
+<div class="note" id="monarchNote">数据面待补。</div>
+<div class="tableScroll">
+<table data-sortable data-table="monarch"><thead><tr>
+  <th>#</th><th data-sort="text">姓名</th><th data-sort="text">国家</th>
+  <th data-sort="num">ADM/DIP/MIL</th><th data-sort="num">三维合计</th>
+  <th data-sort="date">起</th><th data-sort="date">止</th><th data-sort="num">在位月数</th>
+  <th data-sort="num">发展度增量</th><th data-sort="num">年均增量</th><th data-sort="num">综合评分</th>
+</tr></thead><tbody id="monarchBody"></tbody></table>
+</div>
+
+<!-- HOST_SCRIPTS: as served, this page is the hosted viewer and loads the shared
+     assets over HTTP. scripts/render-timeline.ts replaces this entire block with
+     the inline scripts that make the standalone file self-contained. -->
+<script src="paint.js"></script>
+<!-- A module: the bootstrap imports the parser and the builder. paint.js stays a
+     classic script because the player reads its functions as globals. -->
+<script type="module" src="viewer-page.js"></script>
+</body></html>

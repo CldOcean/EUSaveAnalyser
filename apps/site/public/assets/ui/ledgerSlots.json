@@ -1,0 +1,388 @@
+{
+ "schema": 1,
+ "income": {
+  "count": 19,
+  "slots": [
+   {
+    "index": 0,
+    "key": "taxation",
+    "name": "税收",
+    "en": "Tax",
+    "locKey": "INCOMETAX"
+   },
+   {
+    "index": 1,
+    "key": "production",
+    "name": "生产",
+    "en": "Production",
+    "locKey": "INCOMEPROD"
+   },
+   {
+    "index": 2,
+    "key": "trade",
+    "name": "贸易",
+    "en": "Trade",
+    "locKey": "INCOMETRADE"
+   },
+   {
+    "index": 3,
+    "key": "gold",
+    "name": "金矿",
+    "en": "Gold",
+    "locKey": "INCOMEGOLD"
+   },
+   {
+    "index": 4,
+    "key": "tariffs",
+    "name": "关税",
+    "en": "Tariffs",
+    "locKey": "INCOMETARRIFFS"
+   },
+   {
+    "index": 5,
+    "key": "vassals",
+    "name": "贡金",
+    "en": "Vassals",
+    "locKey": "INCOMEVASSAL"
+   },
+   {
+    "index": 6,
+    "key": "harbor_fees",
+    "name": "港务费",
+    "en": "Harbor Fees",
+    "locKey": "INCOMEHARBORFEES"
+   },
+   {
+    "index": 7,
+    "key": "subsidies",
+    "name": "战争援助",
+    "en": "Subsidies",
+    "locKey": "INCOMESUBS"
+   },
+   {
+    "index": 8,
+    "key": "war_reparations",
+    "name": "战争赔款",
+    "en": "War Reparations",
+    "locKey": "INCOME_WAR_REPARATION"
+   },
+   {
+    "index": 9,
+    "key": "interest",
+    "name": "利息",
+    "en": "Interest"
+   },
+   {
+    "index": 10,
+    "key": "gifts",
+    "name": "礼物",
+    "en": "Gifts",
+    "locKey": "INCOMEGIFT"
+   },
+   {
+    "index": 11,
+    "key": "events",
+    "name": "事件",
+    "en": "Events",
+    "locKey": "INCOMEEVENT"
+   },
+   {
+    "index": 12,
+    "key": "spoils_of_war",
+    "name": "战利品",
+    "en": "Spoils of War"
+   },
+   {
+    "index": 13,
+    "key": "treasure_fleet",
+    "name": "珍宝船队",
+    "en": "Treasure Fleet",
+    "locKey": "INCOME_TREASURE_FLEET"
+   },
+   {
+    "index": 14,
+    "key": "siphoning_income",
+    "name": "被宗主国榨取收入",
+    "en": "Siphoning Income",
+    "locKey": "EXPENSE_SIPHON_INCOME"
+   },
+   {
+    "index": 15,
+    "key": "condottieri",
+    "name": "雇佣兵佣金",
+    "en": "Condottieri"
+   },
+   {
+    "index": 16,
+    "key": "knowledge_sharing",
+    "name": "知识共享",
+    "en": "Knowledge Sharing"
+   },
+   {
+    "index": 17,
+    "key": "blockading_foreign_ports",
+    "name": "封锁外国港口",
+    "en": "Blockading Ports"
+   },
+   {
+    "index": 18,
+    "key": "looting_foreign_cities",
+    "name": "劫掠外国城市",
+    "en": "Looting Cities"
+   }
+  ]
+ },
+ "expense": {
+  "count": 38,
+  "slots": [
+   {
+    "index": 0,
+    "key": "advisor_maintenance",
+    "name": "顾问维护",
+    "en": "Advisor Maintenance",
+    "locKey": "EXPENSECOURTMAINTENANCE"
+   },
+   {
+    "index": 1,
+    "key": "interest",
+    "name": "利息",
+    "en": "Interest",
+    "locKey": "EXPENSEINTEREST"
+   },
+   {
+    "index": 2,
+    "key": "state_maintenance",
+    "name": "直属州维护费",
+    "en": "State Maintenance",
+    "locKey": "EXPENSE_STATE_MAINTENANCE"
+   },
+   {
+    "index": 3,
+    "key": null,
+    "name": "其他"
+   },
+   {
+    "index": 4,
+    "key": "subsidies",
+    "name": "战争援助",
+    "en": "Subsidies",
+    "locKey": "EXPENSESUBS"
+   },
+   {
+    "index": 5,
+    "key": "war_reparations",
+    "name": "战争赔款",
+    "en": "War Reparations",
+    "locKey": "EXPENSE_WAR_REPARATIONS"
+   },
+   {
+    "index": 6,
+    "key": "army_maintenance",
+    "name": "陆军维护费",
+    "en": "Army Maintenance",
+    "locKey": "EXPENSEAM"
+   },
+   {
+    "index": 7,
+    "key": "fleet_maintenance",
+    "name": "海军维护费",
+    "en": "Fleet Maintenance",
+    "locKey": "EXPENSEFM"
+   },
+   {
+    "index": 8,
+    "key": "fort_maintenance",
+    "name": "要塞维护费",
+    "en": "Fort Maintenance",
+    "locKey": "EXPENSEFORTM"
+   },
+   {
+    "index": 9,
+    "key": "colonists",
+    "name": "殖民地维护费",
+    "en": "Colonists",
+    "locKey": "EXPENSECOLONIAL"
+   },
+   {
+    "index": 10,
+    "key": "missionaries",
+    "name": "传教维护费",
+    "en": "Missionaries",
+    "locKey": "EXPENSEMISSIONARY"
+   },
+   {
+    "index": 11,
+    "key": "raising_armies",
+    "name": "陆军征募费用",
+    "en": "Raising Armies",
+    "locKey": "EXPENSEARMY"
+   },
+   {
+    "index": 12,
+    "key": "building_fleets",
+    "name": "造船费用",
+    "en": "Building Fleets",
+    "locKey": "EXPENSEFLEET"
+   },
+   {
+    "index": 13,
+    "key": "building_fortresses",
+    "name": "要塞建设费用",
+    "en": "Building Fortresses",
+    "locKey": "EXPENSEFORT"
+   },
+   {
+    "index": 14,
+    "key": "buildings",
+    "name": "建造建筑",
+    "en": "Buildings",
+    "locKey": "EXPENSEMAN"
+   },
+   {
+    "index": 15,
+    "key": null,
+    "name": "其他"
+   },
+   {
+    "index": 16,
+    "key": "repaid_loans",
+    "name": "偿还贷款",
+    "en": "Repaid Loans",
+    "locKey": "EXPENSELOAN"
+   },
+   {
+    "index": 17,
+    "key": "gifts",
+    "name": "礼物",
+    "en": "Gifts",
+    "locKey": "EXPENSEGIFT"
+   },
+   {
+    "index": 18,
+    "key": "advisors",
+    "name": "顾问",
+    "en": "Hire / Promote Advisors",
+    "locKey": "EXPENSECOURT"
+   },
+   {
+    "index": 19,
+    "key": "events",
+    "name": "事件",
+    "en": "Events",
+    "locKey": "EXPENSEEVENTS"
+   },
+   {
+    "index": 20,
+    "key": "peace",
+    "name": "和平",
+    "en": "Peace",
+    "locKey": "EXPENSEPEACE"
+   },
+   {
+    "index": 21,
+    "key": "vassal_fee",
+    "name": "附庸国贡赋",
+    "en": "Vassal Fee",
+    "locKey": "EXPENSEVASSAL"
+   },
+   {
+    "index": 22,
+    "key": "tariffs",
+    "name": "出口关税",
+    "en": "Tariffs",
+    "locKey": "EXPENSETARIFFS"
+   },
+   {
+    "index": 23,
+    "key": "support_loyalists",
+    "name": "支持叛军",
+    "en": "Support Loyalists",
+    "locKey": "EXPENSESUPPORTREBELS"
+   },
+   {
+    "index": 24,
+    "key": null,
+    "name": "其他"
+   },
+   {
+    "index": 25,
+    "key": null,
+    "name": "其他"
+   },
+   {
+    "index": 26,
+    "key": "condottieri",
+    "name": "遣外雇佣军团费",
+    "en": "Condottieri",
+    "locKey": "EXPENSE_CONDOTTIERI"
+   },
+   {
+    "index": 27,
+    "key": "root_out_corruption",
+    "name": "根除腐败",
+    "en": "Root out Corruption",
+    "locKey": "EXPENSE_CORRUPTION"
+   },
+   {
+    "index": 28,
+    "key": "embrace_institution",
+    "name": "接纳思潮",
+    "en": "Embrace Institution",
+    "locKey": "EXPENSE_TECHNOLOGY"
+   },
+   {
+    "index": 29,
+    "key": null,
+    "name": "其他"
+   },
+   {
+    "index": 30,
+    "key": "knowledge_sharing",
+    "name": "知识共享",
+    "en": "Knowledge Sharing"
+   },
+   {
+    "index": 31,
+    "key": "trade_company_investments",
+    "name": "贸易公司投资",
+    "en": "Trade Company Investments"
+   },
+   {
+    "index": 32,
+    "key": null,
+    "name": "其他"
+   },
+   {
+    "index": 33,
+    "key": "ports_blockaded",
+    "name": "港口被封锁",
+    "en": "Ports Blockaded"
+   },
+   {
+    "index": 34,
+    "key": "cities_looted",
+    "name": "城市被劫掠",
+    "en": "Cities Looted"
+   },
+   {
+    "index": 35,
+    "key": "monuments",
+    "name": "伟大工程",
+    "en": "Monuments",
+    "locKey": "EXPENSEGREATPROJECTS"
+   },
+   {
+    "index": 36,
+    "key": "cot_upgrades",
+    "name": "贸易中心升级",
+    "en": "CoT Upgrades"
+   },
+   {
+    "index": 37,
+    "key": "colony_changes",
+    "name": "殖民地变动",
+    "en": "Colony Changes"
+   }
+  ]
+ }
+}

@@ -1,0 +1,29 @@
+# Cloudflare Pages project for the save catalogue.
+#
+# Dashboard setup (one time):
+#   1. Pages -> Create project -> connect this GitHub repo
+#   2. Build output directory: public                 (Root directory: apps/site)
+#      No build command: apps/site/public IS the deploy output. The shared artwork
+#      (assets/flags/...) and the wallpapers (背景图/) live inside it, so nothing has
+#      to be copied or generated at deploy time. Run `pnpm verify:deploy` first.
+#   3. Settings -> Functions -> R2 bucket bindings: add SAVES_BUCKET -> your bucket
+#   4. Settings -> Environment variables: UPLOAD_TOKEN = a long random string
+#   5. Settings -> Custom domains: add your domain (one click when its DNS is here)
+#
+# Deploy through git, never `wrangler pages deploy apps/site/public`: the local-only
+# assets/flags/mods/ (14,550 files, gitignored) would be uploaded and blow past the
+# free plan's 20,000-file limit.
+#
+# Pages turns every file under apps/site/functions/ into a route by path, which is
+# how /api/saves and /api/saves/:id exist without any routing configuration.
+name = "eu4-save-archive"
+compatibility_date = "2025-01-01"
+
+# Local `wrangler pages dev apps/site/public` picks these up too.
+[[r2_buckets]]
+binding = "SAVES_BUCKET"
+bucket_name = "eu4-saves"
+
+[vars]
+# Leave UPLOAD_TOKEN unset here on purpose: put it in the dashboard as a secret.
+# Without it the API is read-only, which is the safe default for a public site.

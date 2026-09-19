@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EU4 存档档案馆</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="nav">
+  <div class="navTitle">EU4 存档档案馆</div>
+  <button id="settingsBtn" title="设置">⚙</button>
+</nav>
+
+<div class="menu" id="settingsPanel">
+  <button class="mi" id="setToken">上传口令…</button>
+  <button class="mi" id="setSort">排序：上传时间</button>
+</div>
+
+<header class="hero">
+  <h1>存档目录</h1>
+  <p class="sub" id="summary">正在读取…</p>
+</header>
+
+<div class="boot" id="boot" hidden></div>
+
+<section class="panel" id="uploadPanel">
+  <div class="drop" id="drop">
+    <strong>拖入 .eu4 存档</strong>
+    <span>或</span>
+    <button id="pick">选择文件</button>
+    <input type="file" id="file" accept=".eu4" multiple hidden>
+  </div>
+  <div class="progress" id="progress"></div>
+</section>
+
+<section id="listSection">
+  <div class="toolbar">
+    <span id="count"></span>
+    <span class="grow"></span>
+    <button id="flagSet" title="卡片上的旗帜用哪一套：原版 / 国家娘">🏳️ 原版</button>
+    <label class="sort">排序
+      <select id="sort">
+        <option value="uploadedAt">上传时间</option>
+        <option value="endDate">结档日期</option>
+        <option value="sealedAt">封档日期</option>
+        <option value="player">玩家</option>
+        <option value="name">文件名</option>
+        <option value="size">文件大小</option>
+      </select>
+    </label>
+    <button id="dir" title="切换升序/降序">↓</button>
+  </div>
+  <div class="cards" id="cards"></div>
+  <p class="empty" id="empty" hidden>目录还是空的——把 .eu4 拖到上面的方框里试试。</p>
+</section>
+
+<script src="paint.js"></script>
+<script type="module" src="app.js"></script>
+<script>
+  // Deliberately a classic script: it must still run when app.js cannot, because
+  // a dead page with no explanation is the worst kind of failure. The two ways
+  // this page dies silently are being opened as a file and the server being down.
+  (function () {
+    var notice = document.getElementById('boot');
+    function show(html) {
+      notice.innerHTML = html;
+      notice.hidden = false;
+    }
+    if (location.protocol === 'file:') {
+      show(
+        '<b>这个页面必须通过本地服务器打开。</b><br>' +
+        '直接双击 HTML 文件时浏览器会拦截模块脚本（file:// 的跨域限制），所有按钮都会失效。<br>' +
+        '请在项目目录执行 <code>pnpm site</code>，然后访问 <code>http://127.0.0.1:8788</code>。'
+      );
+      return;
+    }
+    setTimeout(function () {
+      if (!window.__appReady) {
+        show(
+          '<b>界面脚本没有加载成功。</b><br>' +
+          '最常见的原因是本地服务没在运行。请在项目目录执行 <code>pnpm site</code>，' +
+          '确认终端打印了监听地址后再刷新；也可以按 F12 看 Console 里的具体报错。'
+        );
+      }
+    }, 1500);
+  })();
+</script>
+</body>
+</html>
