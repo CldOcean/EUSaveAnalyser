@@ -1,0 +1,35 @@
+{
+  "name": "eu4-save-analyser",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal archive + analyser for Europa Universalis IV save games",
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "info": "node packages/eu4-parser/src/cli.ts info",
+    "sections": "node packages/eu4-parser/src/cli.ts sections",
+    "dump": "node packages/eu4-parser/src/cli.ts dump",
+    "provinces": "node packages/eu4-parser/src/cli.ts provinces",
+    "countries": "node packages/eu4-parser/src/cli.ts countries",
+    "map": "node packages/eu4-parser/src/cli.ts map",
+    "parse": "node packages/eu4-parser/src/cli.ts parse",
+    "render": "node scripts/render-map.ts",
+    "timeline": "node scripts/render-timeline.ts",
+    "timeline:fast": "node scripts/render-timeline.ts --scale 2",
+    "flags": "node scripts/export-flags.ts",
+    "flags:colonial": "node scripts/export-colonial-flags.ts",
+    "verify:flags": "node scripts/verify-flags.ts",
+    "verify:deploy": "node scripts/verify-deploy.ts",
+    "site": "node apps/site/src/dev-server.ts",
+    "browser": "node scripts/build-browser-parser.ts && node scripts/build-wallpapers.ts",
+    "wallpapers": "node scripts/build-wallpapers.ts",
+    "save:viewer": "node apps/site/src/build-viewer.ts",
+    "verify": "node scripts/verify.ts",
+    "verify:timeline": "node scripts/verify-timeline.ts",
+    "verify:player": "node scripts/verify-player.ts && node scripts/verify-player-run.ts",
+    "test": "node --test \"packages/eu4-parser/test/*.test.ts\" \"apps/site/test/*.test.ts\""
+  }
+}

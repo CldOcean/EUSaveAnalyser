@@ -8,8 +8,8 @@
  * `[[path]]` is a catch-all segment, so /saves/<id>/viewer/index.html and the
  * peak-*.png files next to it are all served by this one file.
  */
-import type { Storage } from '../../src/api.ts';
-import { r2Storage } from '../../src/storage-r2.ts';
+import type { Storage } from '../../../../src/api.ts';
+import { r2Storage } from '../../../../src/storage-r2.ts';
 
 interface Env {
   SAVES_BUCKET: Parameters<typeof r2Storage>[0];
